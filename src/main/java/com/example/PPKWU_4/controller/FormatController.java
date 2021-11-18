@@ -128,17 +128,28 @@ public class FormatController {
             }
         } else if (inputFormat.equals("xml")) {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new InputSource(new StringReader(text)));
-            NodeList list = doc.getElementsByTagName("stringStats");
+            String text2 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+                    "<stringStats>\n" +
+                    "   <data>" +
+                    "    <lowerCase>4</lowerCase>\n" +
+                    "    <upperCase>5</upperCase>\n" +
+                    "    <numbers>3</numbers>\n" +
+                    "    <specialCharacters>5</specialCharacters>\n" +
+                    "   </data>" +
+                    "</stringStats>";
+            Document doc = db.parse(new InputSource(new StringReader(text2)));
+
+            NodeList list = doc.getElementsByTagName("data");
 
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
                 Element element = (Element) node;
-                data[i] = Integer.parseInt(element.getElementsByTagName("lowerCase").item(0).getTextContent());
-                data[i] = Integer.parseInt(element.getElementsByTagName("upperCase").item(1).getTextContent());
-                data[i] = Integer.parseInt(element.getElementsByTagName("numbers").item(2).getTextContent());
-                data[i] = Integer.parseInt(element.getElementsByTagName("specialCharacters").item(3).getTextContent());
+                data[0] = Integer.parseInt(element.getElementsByTagName("lowerCase").item(0).getTextContent());
+                data[1] = Integer.parseInt(element.getElementsByTagName("upperCase").item(0).getTextContent());
+                data[2] = Integer.parseInt(element.getElementsByTagName("numbers").item(0).getTextContent());
+                data[3] = Integer.parseInt(element.getElementsByTagName("specialCharacters").item(0).getTextContent());
             }
         }
 
