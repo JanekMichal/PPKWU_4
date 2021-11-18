@@ -13,6 +13,8 @@ import org.xembly.Xembler;
 
 import java.util.Arrays;
 
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
+
 @RestController
 @RequestMapping("format_controller/")
 public class FormatController {
@@ -87,7 +89,7 @@ public class FormatController {
                                 @PathVariable("output_format") String outputFormat) throws ParseException {
 
         if (inputFormat.equals(outputFormat)) return text;
-
+        System.out.println(text);
         StringBuilder textStats = new StringBuilder();
 
         int[] data = new int[4];
@@ -100,20 +102,18 @@ public class FormatController {
                 data[i] = Integer.parseInt(temp[1]);
                 System.out.println(data[i]);
             }
+        } else if (inputFormat.equals("json")) {
+            JSONParser parser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) parser.parse(text);
+
+            data[0] = Integer.parseInt(jsonObject.get("lowerCase").toString());
+            data[1] = Integer.parseInt(jsonObject.get("upperCase").toString());
+            data[2] = Integer.parseInt(jsonObject.get("numbers").toString());
+            data[3] = Integer.parseInt(jsonObject.get("specialCharacters").toString());
         }
-//        } else if (inputFormat.equals("Json")) {
-//            JSONParser parser = new JSONParser();
-//            JSONObject jsonObject = (JSONObject) parser.parse(text);
-//
-//            data[0] = Integer.parseInt(jsonObject)
-////            for (int i = 0; i < jsonObject.size(); i++) {
-////
-////            }
-
-//        }
 
 
-        if (inputFormat.equals("csv")) {
+        if (outputFormat.equals("csv")) {
             textStats.append("lowerCase,upperCase,numbers,specialCharacters\n");
 
             textStats.append(data[0]).append(",");
@@ -121,7 +121,7 @@ public class FormatController {
             textStats.append(data[2]).append(",");
             textStats.append(data[3]);
             return String.valueOf(textStats);
-        } else if (inputFormat.equals("json")) {
+        } else if (outputFormat.equals("json")) {
             JSONObject jsonObject = new JSONObject();
 
             jsonObject.put("lowerCase", data[0]);
@@ -130,14 +130,14 @@ public class FormatController {
             jsonObject.put("specialCharacters", data[3]);
 
             return jsonObject.toJSONString();
-        } else if (inputFormat.equals("txt")) {
+        } else if (outputFormat.equals("txt")) {
             textStats.append("lowerCase: ").append(data[0]).append("\n");
             textStats.append("upperCase: ").append(data[1]).append("\n");
             textStats.append("numbers: ").append(data[2]).append("\n");
             textStats.append("specialCharacters: ").append(data[3]);
 
             return textStats.toString();
-        } else if (inputFormat.equals("xml")) {
+        } else if (outputFormat.equals("xml")) {
 
             try {
                 String xml = new Xembler(
