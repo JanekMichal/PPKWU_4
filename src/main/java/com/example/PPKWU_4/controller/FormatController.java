@@ -89,7 +89,6 @@ public class FormatController {
                                 @PathVariable("output_format") String outputFormat) throws ParseException {
 
         if (inputFormat.equals(outputFormat)) return text;
-        System.out.println(text);
         StringBuilder textStats = new StringBuilder();
 
         int[] data = new int[4];
@@ -100,7 +99,6 @@ public class FormatController {
             for (int i = 0; i < splitData.length; i++) {
                 temp = splitData[i].split(" ");
                 data[i] = Integer.parseInt(temp[1]);
-                System.out.println(data[i]);
             }
         } else if (inputFormat.equals("json")) {
             JSONParser parser = new JSONParser();
@@ -110,6 +108,12 @@ public class FormatController {
             data[1] = Integer.parseInt(jsonObject.get("upperCase").toString());
             data[2] = Integer.parseInt(jsonObject.get("numbers").toString());
             data[3] = Integer.parseInt(jsonObject.get("specialCharacters").toString());
+        } else if (inputFormat.equals("csv")) {
+            String[] splitLinesData = text.split("\n");
+            String[] splitData = splitLinesData[1].split(",");
+            for (int i = 0; i < splitData.length; i++) {
+                data[i] = Integer.parseInt(splitData[i]);
+            }
         }
 
 
