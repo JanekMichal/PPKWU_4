@@ -39,6 +39,8 @@ XML
 </stringStats>
 ```
 
+Example of use:
+
 TXT -> CSV
 
 ```
@@ -77,6 +79,7 @@ Response:
 
 
 Poprawka zadania 3
+
 This REST API provides you with informations about string you passed, in CSV, JSON and XML format and convert
 
 
@@ -85,7 +88,7 @@ CSV:
 ```
 Request:
 
-http://localhost:8082/response_format_controller/analyze_string/csv/fdasFDSAF764**)(())
+http://localhost:8082/format_controller/analyze_string/csv/fdasFDSAF764**)(())
 
 Response:
 
@@ -98,7 +101,7 @@ JSON:
 ```
 Request:
 
-http://localhost:8082/response_format_controller/analyze_string/json/fdasFDSAF764**)(())
+http://localhost:8082/format_controller/analyze_string/json/fdasFDSAF764**)(())
 
 Response:
 
@@ -113,7 +116,7 @@ Response:
 XML:
 ```
 Request:
-http://localhost:8082/response_format_controller/analyze_string/xml/fdasFDSAF764**)(())
+http://localhost:8082/format_controller/analyze_string/xml/fdasFDSAF764**)(())
 
 Response:
 
@@ -129,7 +132,7 @@ Response:
 TXT:
 ```
 Request:
-http://localhost:8082/response_format_controller/analyze_string/txt/fdasFDSAF764**)(())
+http://localhost:8082/format_controller/analyze_string/txt/fdasFDSAF764**)(())
 
 Response:
 
