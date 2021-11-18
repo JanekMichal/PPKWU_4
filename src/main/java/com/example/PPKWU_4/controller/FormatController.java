@@ -130,16 +130,8 @@ public class FormatController {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder db = dbf.newDocumentBuilder();
-            String text2 = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                    "<stringStats>\n" +
-                    "   <data>" +
-                    "    <lowerCase>4</lowerCase>\n" +
-                    "    <upperCase>5</upperCase>\n" +
-                    "    <numbers>3</numbers>\n" +
-                    "    <specialCharacters>5</specialCharacters>\n" +
-                    "   </data>" +
-                    "</stringStats>";
-            Document doc = db.parse(new InputSource(new StringReader(text2)));
+
+            Document doc = db.parse(new InputSource(new StringReader(text)));
 
             NodeList list = doc.getElementsByTagName("data");
 
