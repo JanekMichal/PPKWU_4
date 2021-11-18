@@ -8,9 +8,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xembly.Directives;
 import org.xembly.Xembler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Arrays;
 
 import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
@@ -86,7 +98,7 @@ public class FormatController {
     @GetMapping("format_data/{input_format}/{output_format}/{text}")
     public String convertFormat(@PathVariable("text") String text,
                                 @PathVariable("input_format") String inputFormat,
-                                @PathVariable("output_format") String outputFormat) throws ParseException {
+                                @PathVariable("output_format") String outputFormat) throws ParseException, ParserConfigurationException, IOException, SAXException {
 
         if (inputFormat.equals(outputFormat)) return text;
         StringBuilder textStats = new StringBuilder();
@@ -113,6 +125,20 @@ public class FormatController {
             String[] splitData = splitLinesData[1].split(",");
             for (int i = 0; i < splitData.length; i++) {
                 data[i] = Integer.parseInt(splitData[i]);
+            }
+        } else if (inputFormat.equals("xml")) {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(new StringReader(text)));
+            NodeList list = doc.getElementsByTagName("stringStats");
+
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                Element element = (Element) node;
+                data[i] = Integer.parseInt(element.getElementsByTagName("lowerCase").item(0).getTextContent());
+                data[i] = Integer.parseInt(element.getElementsByTagName("upperCase").item(1).getTextContent());
+                data[i] = Integer.parseInt(element.getElementsByTagName("numbers").item(2).getTextContent());
+                data[i] = Integer.parseInt(element.getElementsByTagName("specialCharacters").item(3).getTextContent());
             }
         }
 
